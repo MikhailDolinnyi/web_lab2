@@ -114,7 +114,7 @@ async function onSubmit(ev) {
 
     try {
         const params = new URLSearchParams(values).toString()
-        const response = await fetch(`/lab2-1.0-SNAPSHOT/hello-servlet?${params}`, {
+        const response = await fetch(`/lab2-1.0-SNAPSHOT/controller-servlet?${params}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
