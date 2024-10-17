@@ -91,7 +91,7 @@ function handleClick(event) {
 }
 
 // Отправка GET запроса с параметрами
-async function submitForm(valuesб ) {
+async function submitForm(values) {
     const params = new URLSearchParams(values).toString();
     const response = await fetch(`/lab2-1.0-SNAPSHOT/controller-servlet?${params}`, {
         method: 'GET',
