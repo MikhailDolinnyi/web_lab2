@@ -56,7 +56,7 @@
         <td id="input">
 
             <div id="error" hidden></div>
-            <form action="/" method="POST" id="data-form">
+            <form action="/" method="GET" id="data-form">
                 <fieldset id="legend-x">
                     <label for="x">Введите X (от -3 до 3):</label>
                     <input type="text" id="x" name="x" required>

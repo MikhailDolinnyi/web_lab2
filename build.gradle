@@ -25,6 +25,7 @@ dependencies {
     compileOnly('jakarta.json.bind:jakarta.json.bind-api:2.0.0')
     compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
 
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
