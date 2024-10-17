@@ -45,6 +45,11 @@ class YValidator extends Validator {
         if (isNaN(value)) {
             throw new InvalidValueException("Неверное значение Y");
         }
+
+        const y = Number(value);
+        if (y < -4 || y > 4) {
+            throw new InvalidValueException("Число Y не входит в диапазон");
+        }
         return true;
     }
 }
@@ -59,11 +64,55 @@ function validateFormInput(values) {
     rValidator.validate(values.r);
 }
 
-const table = document.getElementById("result-table");
-const errorDiv = document.getElementById("error");
-const form = document.getElementById("data-form");
+// Функция для обработки кликов по SVG
+function handleClick(event) {
+    const svg = document.getElementById("plate");
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const coords = point.matrixTransform(svg.getScreenCTM().inverse());
 
-async function onSubmit(ev) {
+    const x = (coords.x - 250) / 33;
+    let y = (250 - coords.y) / 25;
+    y = Math.round(y);
+
+    const values = {
+        x: x.toFixed(2),
+        y: y,
+        r: document.querySelector('input[name="r"]:checked')?.value
+    };
+
+    try {
+        validateFormInput(values);
+        submitForm(values);
+    } catch (e) {
+        alert(e.message);
+    }
+}
+
+// Отправка GET запроса с параметрами
+async function submitForm(valuesб ) {
+    const params = new URLSearchParams(values).toString();
+    const response = await fetch(`/lab2-1.0-SNAPSHOT/controller-servlet?${params}`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json;charset=utf-8'}
+    });
+
+    if (response.ok) {
+        const html = await response.text();
+        document.open();
+        document.write(html);
+        document.close();
+    } else {
+        alert("Ошибка при получении данных.");
+    }
+}
+
+// Обработка формы
+const form = document.getElementById("data-form");
+const errorDiv = document.getElementById("error");
+
+form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
 
     const formData = new FormData(form);
@@ -89,23 +138,19 @@ async function onSubmit(ev) {
     });
 
     if (response.ok) {
-
-        // Получаем HTML-ответ
         const html = await response.text();
-        // Заменяем содержимое текущей страницы на HTML-ответ
         document.open();
         document.write(html);
         document.close();
-
     } else {
-
-
         errorDiv.hidden = false;
         errorDiv.textContent = "Ошибка при получении данных.";
     }
-}
+});
 
-form.addEventListener('submit', onSubmit);
+// Добавляем обработчик клика на SVG
+document.getElementById("plate").addEventListener("click", handleClick);
+
 document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', () => {
         document.getElementById("intro_audio").play();

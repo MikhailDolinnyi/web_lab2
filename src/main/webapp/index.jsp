@@ -1,15 +1,17 @@
+<%@ page import="ru.mikhail.lab2.ResultDto" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ЛР №1</title>
+    <title>ЛР №2</title>
     <link rel="stylesheet" href="css/site.css" type="text/css">
     <script defer src="js/index.js"></script>
 </head>
 <body>
 
-<header>Долинный Михаил Владимирович, P3232, 408549</header>
+<header>Долинный Михаил Владимирович, P3232, 99438</header>
 <audio id="intro_audio" src="audio/site-intro.mp3" autoplay></audio>
 <table>
     <tr>
@@ -48,7 +50,14 @@
                 <text x="260" y="154" class="small" fill="white">R</text>
 
 
+                <circle id="point" cx="0" cy="0" r="3" fill="red" visibility="hidden"></circle>
             </svg>
+
+
+
+
+
+
 
         </td>
 
@@ -60,16 +69,7 @@
                 <fieldset id="legend-x">
                     <label for="x">Введите X (от -3 до 3):</label>
                     <input type="text" id="x" name="x" required>
-                    <%--                    <legend > Введите X</legend>--%>
-                    <%--                    <label><input type="radio" name="x" value="-4"> -4</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="-3"> -3</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="-2"> -2</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="-1"> -1</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="0"> 0</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="1"> 1</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="2"> 2</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="3"> 3</label>--%>
-                    <%--                    <label><input type="radio" name="x" value="4"> 4</label>--%>
+
                 </fieldset>
 
                 <!-- Ввод Y -->
@@ -87,8 +87,7 @@
                         <option value="4">4</option>
                     </select>
 
-                    <%--                    <label for="y">Введите Y (от -5 до 5):</label>--%>
-                    <%--                    <input type="text" id="y" name="y" required>--%>
+
                 </fieldset>
                 <!-- Выбор радиуса -->
                 <fieldset id="legend-r">
@@ -100,14 +99,6 @@
                     <label><input type="radio" name="r" value="4"> 4</label>
                     <label><input type="radio" name="r" value="5"> 5</label>
 
-                    <%--                    <label for="r">Выберите радиус R:</label>--%>
-                    <%--                    <select id="r" name="r" required>--%>
-                    <%--                        <option value="1">1</option>--%>
-                    <%--                        <option value="1.5">1.5</option>--%>
-                    <%--                        <option value="2">2</option>--%>
-                    <%--                        <option value="2.5">2.5</option>--%>
-                    <%--                        <option value="3">3</option>--%>
-                    <%--                    </select>--%>
                 </fieldset>
 
                 <!-- Кнопка отправки -->
@@ -127,6 +118,29 @@
                     <th id="result-now">Now</th>
                     <th id="result-answer">Result</th>
                 </tr>
+                <%
+                    List<ResultDto> resultList = (List<ResultDto>) application.getAttribute("resultList");
+                    if (resultList != null) {
+                        for (ResultDto result : resultList) {
+                %>
+                <tr>
+                    <td><%=result.getX()%>
+                    </td>
+                    <td><%=result.getY()%>
+                    </td>
+                    <td><%=result.getR()%>
+                    </td>
+                    <td><%=result.getCompleteTime()%> нс
+                    </td>
+                    <td><%=result.getTime()%>
+                    </td>
+
+                    <td><%=result.getResult()%>
+                    </td>
+                        <%
+                        }
+                    }%>
+
             </table>
         </td>
     </tr>
