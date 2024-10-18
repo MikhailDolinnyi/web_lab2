@@ -11,6 +11,7 @@
 <body>
 
 <header>Результат проверки</header>
+<audio id="intro_audio" src="audio/CristoforoColombo.mp3" autoplay></audio>
 
 <table id="result">
     <tr>
