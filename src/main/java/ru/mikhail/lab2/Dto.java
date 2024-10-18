@@ -35,6 +35,15 @@ public class Dto {
         setY(y);
         setR(r);
     }
+
+    @Override
+    public String toString() {
+        return "Dto{" +
+                "x=" + x +
+                ", y=" + y +
+                ", r=" + r +
+                '}';
+    }
 }
 
 

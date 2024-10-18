@@ -6,12 +6,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Результаты</title>
+    <link rel="stylesheet" href="css/result.css" type="text/css">
 </head>
 <body>
 
-<h1>Результаты проверки</h1>
+<header>Результат проверки</header>
 
-<table border="1">
+<table id="result">
     <tr>
         <th>X</th>
         <th>Y</th>
@@ -52,7 +53,7 @@
     %>
 </table>
 
-<a href="index.jsp">Назад</a>
+<a id="return" href="index.jsp">Назад</a>
 
 </body>
 </html>

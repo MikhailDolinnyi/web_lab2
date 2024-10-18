@@ -43,5 +43,15 @@ public class ResultDto {
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return "ResultDto{" +
+                "x=" + x +
+                ", y=" + y +
+                ", r=" + r +
+                ", completeTime=" + completeTime +
+                ", time='" + time + '\'' +
+                ", result=" + result +
+                '}';
+    }
 }

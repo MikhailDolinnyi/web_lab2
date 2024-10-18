@@ -1,4 +1,4 @@
-<%@ page import="ru.mikhail.lab2.ResultDto" %>
+        <%@ page import="ru.mikhail.lab2.ResultDto" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -49,8 +49,14 @@
                 <text x="260" y="360" class="small" fill="white">-R</text>
                 <text x="260" y="154" class="small" fill="white">R</text>
 
-
-                <circle id="point" cx="0" cy="0" r="3" fill="red" visibility="hidden"></circle>
+<%
+    List<ResultDto> resultList = (List<ResultDto>) application.getAttribute("resultList");
+    if (resultList != null) {
+        for (ResultDto result1 : resultList) { %>
+                <circle cx=<%=250+ 33 *result1.getX()%> cy=<%=250 - 25*result1.getY()%> r="3" fill="red" visibility="visible"></circle>
+                <%
+                        }
+                    }%>
             </svg>
 
 
@@ -119,7 +125,7 @@
                     <th id="result-answer">Result</th>
                 </tr>
                 <%
-                    List<ResultDto> resultList = (List<ResultDto>) application.getAttribute("resultList");
+
                     if (resultList != null) {
                         for (ResultDto result : resultList) {
                 %>
@@ -138,8 +144,8 @@
                     <td><%=result.getResult()%>
                     </td>
                         <%
-                        }
-                    }%>
+                            }
+                        }%>
 
             </table>
         </td>
