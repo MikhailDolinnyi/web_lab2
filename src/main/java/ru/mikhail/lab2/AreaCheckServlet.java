@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import static ru.mikhail.lab2.DotChecker.checkDot;
+import static ru.mikhail.lab2.UrlConstants.RESULT_PAGE_URL;
 
 @WebServlet(name = "AreaCheckServlet", value = "/area-check-servlet")
 public class AreaCheckServlet extends HttpServlet {
@@ -24,35 +25,35 @@ public class AreaCheckServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         if (getServletContext().getAttribute("resultList") == null) {
-            getServletContext().setAttribute("resultList", new ArrayList<ResultDto>());
+            getServletContext().setAttribute("resultList", new ArrayList<ResultList>());
         }
-
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            Dto dto = (Dto) request.getAttribute("dto");
-            if (dto == null) {
-                throw new IllegalArgumentException("Отсутствует dto аргумент");
+            Parameters parameters = (Parameters) request.getAttribute("parameters");
+            if (parameters == null) {
+                throw new IllegalArgumentException("Отсутствует Parameters аргумент");
             }
 
-            logger.info("Получена dto\n" + dto);
+            logger.info("Получен Parameters\n" + parameters);
 
             long startTime = System.nanoTime();
-            boolean result = checkDot(dto.getX(), dto.getY(), dto.getR());
+            boolean result = checkDot(parameters.getX(), parameters.getY(), parameters.getR());
             long endTime = System.nanoTime();
 
             long executionTime = Math.max(endTime - startTime, MIN_EXECUTION_TIME_NS);
             String formattedNow = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            List<ResultDto> resultList = getResultListFromContext();
-            ResultDto resultDto = new ResultDto(dto.getX(), dto.getY(), dto.getR(), executionTime, formattedNow, result);
+            List<ResultList> resultList = getResultListFromContext();
+            ResultList resultDto = new ResultList(parameters.getX(), parameters.getY(), parameters.getR(), executionTime, formattedNow, result);
             resultList.add(resultDto);
 
-            logger.info("Добавлен результат\n" + resultDto + "\nПереадресация на страницу результата");
+            logger.info("Добавлен результат\n" + resultDto);
+            logger.info("Переадресация на страницу результата");
 
-            response.sendRedirect(request.getContextPath() + "/result.jsp");
+            response.sendRedirect(request.getContextPath() + RESULT_PAGE_URL);
         } catch (IllegalArgumentException e) {
             logger.warning(e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -62,8 +63,8 @@ public class AreaCheckServlet extends HttpServlet {
 
 
     @SuppressWarnings("unchecked")
-    private List<ResultDto> getResultListFromContext() {
-        List<ResultDto> resultList = (List<ResultDto>) getServletContext().getAttribute("resultList");
+    private List<ResultList> getResultListFromContext() {
+        List<ResultList> resultList = (List<ResultList>) getServletContext().getAttribute("resultList");
         if (resultList == null) {
             resultList = new ArrayList<>();
             getServletContext().setAttribute("resultList", resultList);

@@ -1,42 +1,21 @@
 package ru.mikhail.lab2;
 
-import jakarta.servlet.http.HttpServletRequest;
-
+import java.util.function.Predicate;
 
 public class Validator {
     public void validate(float x, int y, int r) throws ValidateException {
-        validateX(x);
-        validateY(y);
-        validateR(r);
+        validateValue(x, value -> value >= -3 && value <= 3, "Неверное значение X");
+        validateValue(y, value -> value >= -4 && value <= 4, "Неверное значение Y");
+        validateValue(r, value -> value >= 1 && value <= 5, "Неверное значение R");
     }
 
-    private void validateX(float x) throws ValidateException {
+    private <T extends Number> void validateValue(T value, Predicate<T> condition, String errorMessage) throws ValidateException {
         try {
-            if (x < -3 || x > 3) {
-                throw new ValidateException("Неверное значение X");
+            if (!condition.test(value)) {
+                throw new ValidateException(errorMessage);
             }
         } catch (NumberFormatException e) {
-            throw new ValidateException("X не является номером");
-        }
-    }
-
-    private void validateY(int y) throws ValidateException {
-        try {
-            if (y < -4 || y > 4) {
-                throw new ValidateException("Неверное значения Y");
-            }
-        } catch (NumberFormatException e) {
-            throw new ValidateException("Y не является номером");
-        }
-    }
-
-    private void validateR(int r) throws ValidateException {
-        try {
-            if (r < 1 || r > 5) {
-                throw new ValidateException("Неверное значение R");
-            }
-        } catch (NumberFormatException e) {
-            throw new ValidateException("R не является номером");
+            throw new ValidateException(value + " не является номером");
         }
     }
 }

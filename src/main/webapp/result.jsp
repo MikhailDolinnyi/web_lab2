@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="ru.mikhail.lab2.ResultDto" %>
+<%@ page import="ru.mikhail.lab2.ResultList" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -24,9 +24,9 @@
     </tr>
 
     <%
-        List<ResultDto> resultList = (List<ResultDto>) application.getAttribute("resultList");
+        List<ResultList> resultList = (List<ResultList>) application.getAttribute("resultList");
         if (resultList != null && !resultList.isEmpty()) {
-            ResultDto lastResult = resultList.get(resultList.size() - 1);
+            ResultList lastResult = resultList.get(resultList.size() - 1);
     %>
     <tr>
         <td><%= lastResult.getX() %>

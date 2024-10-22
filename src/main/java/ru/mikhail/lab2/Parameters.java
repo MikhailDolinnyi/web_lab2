@@ -1,22 +1,19 @@
 package ru.mikhail.lab2;
 
-public class Dto {
-    private float x;
-    private int y;
-    private int r;
+public class Parameters {
+    final private float x;
+    final private int y;
+    final private int r;
 
 
-    public void setX(float x) {
+    public Parameters(float x, int y, int r) {
         this.x = x;
-    }
-
-    public void setY(int y) {
         this.y = y;
-    }
-
-    public void setR(int r) {
         this.r = r;
     }
+
+
+
 
     public float getX() {
         return x;
@@ -30,15 +27,11 @@ public class Dto {
         return r;
     }
 
-    public void setAll(float x, int y, int r) {
-        setX(x);
-        setY(y);
-        setR(r);
-    }
+
 
     @Override
     public String toString() {
-        return "Dto{" +
+        return "Parameters{" +
                 "x=" + x +
                 ", y=" + y +
                 ", r=" + r +

@@ -1,6 +1,6 @@
 package ru.mikhail.lab2;
 
-public class ResultDto {
+public class ResultList {
     private final float x;
     private final int y;
     private final int r;
@@ -8,7 +8,7 @@ public class ResultDto {
     private final String time;
     private final boolean result;
 
-    public ResultDto(float x, int y, int r,  long completeTime, String time,boolean result) {
+    public ResultList(float x, int y, int r, long completeTime, String time, boolean result) {
         this.x = x;
         this.y = y;
         this.r = r;
@@ -45,7 +45,7 @@ public class ResultDto {
 
     @Override
     public String toString() {
-        return "ResultDto{" +
+        return "ResultList{" +
                 "x=" + x +
                 ", y=" + y +
                 ", r=" + r +

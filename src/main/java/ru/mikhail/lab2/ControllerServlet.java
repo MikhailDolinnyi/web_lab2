@@ -1,39 +1,47 @@
 package ru.mikhail.lab2;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "ControllerServlet", value = "/controller-servlet")
 public class ControllerServlet extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(ControllerServlet.class.getName());
+    private Validator validator;
+
+
+    @Override
+    public void init() {
+        this.validator = new Validator();
+        logger.info("Создан Validator");
+    }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-        Validator validator = new Validator();
-        Dto dto = new Dto();
-        logger.info("Создание Logger и Dto");
         try {
-            parseAndSetParameters(request, dto);
-            logger.info("Парсинг параметров прошёл успешно");
-            validator.validate(dto.getX(), dto.getY(), dto.getR());
+            Parameters parameters = parseAndSetParameters(request);
+            logger.info("Парсинг параметров прошёл успешно:\n" + parameters);
+            logger.info("Создан Parameters");
+
+
+            validator.validate(parameters.getX(), parameters.getY(), parameters.getR());
             logger.info("Валидация прошла успешно");
-            request.setAttribute("dto", dto);
+            request.setAttribute("parameters", parameters);
         } catch (ValidateException e) {
             logger.warning(e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-            return;
-        } catch (NullPointerException | NumberFormatException e) {
+        } catch (IllegalArgumentException e) {
             logger.warning("Неверный формат одной или нескольких переменных, либо отсутствуют значения");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Неверный формат одной или нескольких переменных, либо отсутствуют значения");
-            return;
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            logger.severe("Неожиданная ошибка: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера");
         }
-
-
         logger.info("Переадресация на area-check-servlet");
         // Перенаправление на AreaCheckServlet
         getServletContext().getRequestDispatcher("/area-check-servlet").forward(request, response);
@@ -42,14 +50,25 @@ public class ControllerServlet extends HttpServlet {
     }
 
 
-    private void parseAndSetParameters(HttpServletRequest request, Dto dto) {
+    private Parameters parseAndSetParameters(HttpServletRequest request) {
         String x = request.getParameter("x");
         String y = request.getParameter("y");
         String r = request.getParameter("r");
 
-        dto.setAll(Float.parseFloat(x), Integer.parseInt(y), Integer.parseInt(r));
+        if (x == null || y == null || r == null) {
+            throw new IllegalArgumentException("Один или несколько параметров отсутствуют");
+        }
+
+        try {
+            float xValue = Float.parseFloat(x);
+            int yValue = Integer.parseInt(y);
+            int rValue = Integer.parseInt(r);
+
+            return new Parameters(xValue, yValue, rValue);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Неверный формат одного или нескольких параметров: x = " + x + ", y = " + y + ", r = " + r);
+        }
     }
 
-    public void destroy() {
-    }
+
 }
