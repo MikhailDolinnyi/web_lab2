@@ -19,42 +19,47 @@
         <td id="coordinate-plate">
             <svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" id="plate">
                 <!-- Ось X -->
-                <line x1="50" y1="250" x2="450" y2="250" stroke="silver" stroke-width="2"></line>
+                <line id="axis-x" x1="50" y1="250" x2="450" y2="250" stroke="silver" stroke-width="2"></line>
                 <!-- Ось Y -->
-                <line x1="250" y1="50" x2="250" y2="450" stroke="silver" stroke-width="2"></line>
-
+                <line id="axis-y" x1="250" y1="50" x2="250" y2="450" stroke="silver" stroke-width="2"></line>
 
                 <!-- Стрелки -->
-                <polygon points="450,245 450,255 460,250" fill="silver"></polygon>
-                <polygon points="245,50 255,50 250,40" fill="silver"></polygon>
+                <polygon id="arrow-x" points="450,245 450,255 460,250" fill="silver"></polygon>
+                <polygon id="arrow-y" points="245,50 255,50 250,40" fill="silver"></polygon>
 
                 <!-- Прямоугольник в 3 четверти -->
-                <rect x="200" y="251" width="49" height="99" fill="white"></rect>
+                <rect id="rect" x="200" y="251" width="49" height="99" fill="white"></rect>
                 <!-- 1/4 окружности в 4 четверти -->
-                <path d="M 350 251 A 75 100 400 0 1 251 350 L 251 251 Z" fill="white"></path>
+                <path id="arc" d="M 350 251 A 75 100 400 0 1 251 350 L 251 251 Z" fill="white"></path>
                 <!-- Треугольник в 1 четверти -->
-                <polygon points="251,249 251,200 350,249" fill="white"></polygon>
+                <polygon id="triangle" points="251,249 251,200 350,249" fill="white"></polygon>
 
-                <text x="260" y="50" id="small" fill="white">Y</text>
-                <text x="450" y="240" id="small" fill="white">X</text>
+                <text x="260" y="50" id="text-y" fill="white">Y</text>
+                <text x="450" y="240" id="text-x" fill="white">X</text>
 
                 <!--Метки радиуса-->
-                <line x1="150" y1="245" x2="150" y2="255" stroke="silver" stroke-width="2"></line>
-                <line x1="350" y1="245" x2="350" y2="255" stroke="silver" stroke-width="2"></line>
-                <line x1="245" y1="150" x2="255" y2="150" stroke="silver" stroke-width="2"></line>
-                <line x1="245" y1="350" x2="255" y2="350" stroke="silver" stroke-width="2"></line>
+                <line id="mark-neg-rx" x1="150" y1="245" x2="150" y2="255" stroke="silver" stroke-width="2"></line>
+                <line id="mark-rx" x1="350" y1="245" x2="350" y2="255" stroke="silver" stroke-width="2"></line>
+                <line id="mark-ry" x1="245" y1="150" x2="255" y2="150" stroke="silver" stroke-width="2"></line>
+                <line id="mark-neg-ry" x1="245" y1="350" x2="255" y2="350" stroke="silver" stroke-width="2"></line>
 
-                <text x="130" y="245" class="small" fill="white">-R</text>
-                <text x="353" y="245" class="small" fill="white">R</text>
-                <text x="260" y="360" class="small" fill="white">-R</text>
-                <text x="260" y="154" class="small" fill="white">R</text>
+                <text x="130" y="245" id="label-neg-rx" class="small" fill="white">-R</text>
+                <text x="353" y="245" id="label-rx" class="small" fill="white">R</text>
+                <text x="260" y="360" id="label-neg-ry" class="small" fill="white">-R</text>
+                <text x="260" y="154" id="label-ry" class="small" fill="white">R</text>
 
-<%
+
+        <%
     List<ResultDto> resultList = (List<ResultDto>) application.getAttribute("resultList");
     if (resultList != null) {
-        for (ResultDto result1 : resultList) { %>
-                <circle cx=<%=250+ 33 *result1.getX()%> cy=<%=250 - 25*result1.getY()%> r="3" fill="red" visibility="visible"></circle>
+        for (ResultDto result1 : resultList) {
+            if (result1.getResult()){%>
+                <circle cx=<%=250+ 20 *result1.getX()%> cy=<%=250 - 20*result1.getY()%> r="2" fill="green" visibility="visible"></circle>
                 <%
+                        }
+            else { %>
+                <circle cx=<%=250+ 20 *result1.getX()%> cy=<%=250 - 20*result1.getY()%> r="2" fill="red" visibility="visible"></circle>
+        <%}
                         }
                     }%>
             </svg>
@@ -103,7 +108,7 @@
                     <label><input type="radio" name="r" value="2"> 2</label>
                     <label><input type="radio" name="r" value="3"> 3</label>
                     <label><input type="radio" name="r" value="4"> 4</label>
-                    <label><input type="radio" name="r" value="5"> 5</label>
+                    <label><input type="radio" name="r" value="5" checked> 5</label>
 
                 </fieldset>
 

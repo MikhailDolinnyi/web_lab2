@@ -91,14 +91,16 @@ function handleClick(event) {
     point.y = event.clientY;
     const coords = point.matrixTransform(svg.getScreenCTM().inverse());
 
-    const x = (coords.x - 250) / 33;
-    let y = (250 - coords.y) / 25;
+
+    const r = document.querySelector('input[name="r"]:checked')?.value
+    const x = (coords.x - 250) / 20 ;
+    let y = (250 - coords.y) / 20;
     y = Math.round(y);
 
     const values = {
         x: x.toFixed(2),
         y: y,
-        r: document.querySelector('input[name="r"]:checked')?.value
+        r: r
     };
 
     try {
@@ -141,4 +143,52 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', () => {
         document.getElementById("intro_audio").play();
     }, {once: true});
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let radius = document.querySelector('input[name="r"]:checked').value;
+    console.log("Initial radius:", radius);
+    updateGraph(radius);
+
+    const radioButtons = document.querySelectorAll('input[name="r"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function () {
+            console.log("Changed radius to:", this.value);
+            radius = this.value;
+            updateGraph(radius);
+        });
+    });
+
+    function updateGraph(r) {
+        const scaleFactor = r / 5; // Масштабируем относительно R = 5
+        console.log("Scale factor:", scaleFactor);
+
+        document.getElementById("rect").setAttribute("width", 49 * scaleFactor);
+        document.getElementById("rect").setAttribute("height", 99 * scaleFactor);
+        document.getElementById("rect").setAttribute("x", 250 - 49 * scaleFactor);
+        document.getElementById("rect").setAttribute("y", 250 + 1);
+
+        document.getElementById("arc").setAttribute("d", `M ${250 + 100 * scaleFactor} 251 A ${75 * scaleFactor} ${100 * scaleFactor} 400 0 1 251 ${250 + 100 * scaleFactor} L 251 251 Z`);
+
+        document.getElementById("triangle").setAttribute("points", `251,249 251,${250 - 50 * scaleFactor} ${250 + 100 * scaleFactor},249`);
+
+        document.getElementById("mark-neg-rx").setAttribute("x1", 250 - 100 * scaleFactor);
+        document.getElementById("mark-neg-rx").setAttribute("x2", 250 - 100 * scaleFactor);
+
+        document.getElementById("mark-rx").setAttribute("x1", 250 + 100 * scaleFactor);
+        document.getElementById("mark-rx").setAttribute("x2", 250 + 100 * scaleFactor);
+
+        document.getElementById("mark-ry").setAttribute("y1", 250 - 100 * scaleFactor);
+        document.getElementById("mark-ry").setAttribute("y2", 250 - 100 * scaleFactor);
+
+        document.getElementById("mark-neg-ry").setAttribute("y1", 250 + 100 * scaleFactor);
+        document.getElementById("mark-neg-ry").setAttribute("y2", 250 + 100 * scaleFactor);
+
+        document.getElementById("label-neg-rx").setAttribute("x", 250 - 120 * scaleFactor);
+        document.getElementById("label-rx").setAttribute("x", 250 + 103 * scaleFactor);
+
+        document.getElementById("label-neg-ry").setAttribute("y", 250 + 110 * scaleFactor);
+        document.getElementById("label-ry").setAttribute("y", 250 - 95 * scaleFactor);
+    }
 });
