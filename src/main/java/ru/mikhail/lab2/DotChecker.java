@@ -5,7 +5,7 @@ public class DotChecker {
 
     static boolean checkDot(float x, int y, int r) {
 
-        return checkFirstQuarter(x, y, r) || checkSecondQuarter(x, y, r) ||
+        return checkFirstQuarter(x, y, r) || checkSecondQuarter() ||
                 checkThirdQuarter(x, y, r) || checkFourthQuarter(x, y, r);
     }
 
@@ -20,7 +20,7 @@ public class DotChecker {
     }
 
 
-    static boolean checkSecondQuarter(float x, int y, int r) {
+    static boolean checkSecondQuarter() {
         // Вторая четверть (нет области)
         return false;
     }

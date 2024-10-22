@@ -1,6 +1,5 @@
 package ru.mikhail.lab2;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,7 @@ public class AreaCheckServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(AreaCheckServlet.class.getName());
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         if (getServletContext().getAttribute("resultList") == null) {
             getServletContext().setAttribute("resultList", new ArrayList<ResultList>());
         }
