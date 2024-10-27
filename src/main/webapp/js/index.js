@@ -11,7 +11,6 @@ class Validator {
     }
 }
 
-
 class XValidator extends Validator {
     validate(value) {
         if (isNaN(value)) {
@@ -83,6 +82,9 @@ async function submitForm(values, method = 'GET') {
     }
 }
 
+// Переменная для хранения последнего значения Y в координатах
+let lastYCoord = null;
+
 // Обработчик кликов по SVG
 function handleClick(event) {
     const svg = document.getElementById("plate");
@@ -91,24 +93,54 @@ function handleClick(event) {
     point.y = event.clientY;
     const coords = point.matrixTransform(svg.getScreenCTM().inverse());
 
-
-    const r = document.querySelector('input[name="r"]:checked')?.value
-    const x = (coords.x - 250) / 20 ;
+    const r = document.querySelector('input[name="r"]:checked')?.value;
+    const x = (coords.x - 250) / 20;
     let y = (250 - coords.y) / 20;
     y = Math.round(y);
 
-    const values = {
-        x: x.toFixed(2),
-        y: y,
-        r: r
-    };
+    // Преобразуем Y обратно в координаты
+    const currentYCoord = 250 - (y * 20);
 
-    try {
-        validateFormInput(values);
-        submitForm(values).catch(error => alert(error.message));
-    } catch (e) {
-        alert(e.message);
+    // Проверяем, находится ли курсор в пределах 5 пикселей от последней линии
+    if (lastYCoord !== null && Math.abs(currentYCoord - lastYCoord) <= 5) {
+        // Если да, отправляем запрос
+        const values = {
+            x: x.toFixed(2),
+            y: y,
+            r: r
+        };
+
+        try {
+            validateFormInput(values);
+            submitForm(values).catch(error => alert(error.message));
+        } catch (e) {
+            alert(e.message);
+        }
+    } else {
+        // Если нет, рисуем новую линию
+        drawHorizontalLine(y);
+        lastYCoord = currentYCoord; // Обновляем последнее значение Y в координатах
     }
+}
+
+function drawHorizontalLine(y) {
+    const svg = document.getElementById("plate");
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", 0);
+    line.setAttribute("y1", 250 - (y * 20)); // Преобразование координаты Y
+    line.setAttribute("x2", 500); // Длина линии
+    line.setAttribute("y2", 250 - (y * 20));
+    line.setAttribute("stroke", "red"); // Цвет линии
+    line.setAttribute("stroke-width", 1);
+
+    // Удаляем предыдущую линию, если она существует
+    const existingLine = document.getElementById("horizontal-line");
+    if (existingLine) {
+        svg.removeChild(existingLine);
+    }
+
+    line.setAttribute("id", "horizontal-line");
+    svg.appendChild(line);
 }
 
 // Универсальная обработка формы
@@ -144,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("intro_audio").play();
     }, {once: true});
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     let radius = document.querySelector('input[name="r"]:checked').value;

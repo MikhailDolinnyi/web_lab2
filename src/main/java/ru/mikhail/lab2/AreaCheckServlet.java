@@ -1,5 +1,6 @@
 package ru.mikhail.lab2;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class AreaCheckServlet extends HttpServlet {
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             Parameters parameters = (Parameters) request.getAttribute("parameters");
             if (parameters == null) {
@@ -53,6 +54,9 @@ public class AreaCheckServlet extends HttpServlet {
             logger.info("Переадресация на страницу результата");
 
             response.sendRedirect(request.getContextPath() + RESULT_PAGE_URL);
+
+
+
         } catch (IllegalArgumentException e) {
             logger.warning(e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());

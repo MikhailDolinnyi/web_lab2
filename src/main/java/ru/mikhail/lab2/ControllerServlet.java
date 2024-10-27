@@ -29,6 +29,7 @@ public class ControllerServlet extends HttpServlet {
             logger.info("Создан Parameters");
 
 
+
             validator.validate(parameters.getX(), parameters.getY(), parameters.getR());
             logger.info("Валидация прошла успешно");
             request.setAttribute("parameters", parameters);
@@ -45,6 +46,7 @@ public class ControllerServlet extends HttpServlet {
         logger.info("Переадресация на area-check-servlet");
         // Перенаправление на AreaCheckServlet
         getServletContext().getRequestDispatcher("/area-check-servlet").forward(request, response);
+
 
 
     }
