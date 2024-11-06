@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>ЛР №2</title>
     <link rel="stylesheet" href="css/site.css" type="text/css">
-    <script defer src="js/index.js"></script>
+    <script src="js/index.js"></script>
 </head>
 <body>
 

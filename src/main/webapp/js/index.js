@@ -165,10 +165,11 @@ async function handleSubmitForm(ev, form) {
     }
 }
 
-document.getElementById("data-form").addEventListener('submit', (ev) => handleSubmitForm(ev, ev.target));
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("data-form").addEventListener('submit', (ev) => handleSubmitForm(ev, ev.target));
+    document.getElementById("plate").addEventListener("click", handleClick);
+});
 
-// Добавляем обработчик клика на SVG
-document.getElementById("plate").addEventListener("click", handleClick);
 
 // Автозапуск аудио при первом клике
 document.addEventListener('DOMContentLoaded', () => {
